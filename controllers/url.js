@@ -1,21 +1,19 @@
 const shortid = require("shortid");
-const URl = require("../models/url");
+const URL = require("../models/url");
 
-async function handleGenerateNewShortURL(req,res) {
+async function handleGenerateNewShortURL(req, res) {
+    const body = req.body;
+    if (!body || !body.url) {
+        return res.status(400).json({ error: "url is required" });
+    }
 
-    const body=req.body;
-    if(!body.url) return res.status(400).json({ error : 'url is required'})
-
-    const shortID=shortid();
+    const shortID = shortid();
     await URL.create({
         shortId: shortID,
-        redirectURL : body.url,
-        visitHistory:[],
-
+        redirectURL: body.url,
+        visitHistory: [],
     });
-    return res.json({id:shortId});
-
-
+    return res.json({ id: shortID });
 }
 
 module.exports = {
